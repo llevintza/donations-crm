@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Mailing List Preview – Donations CRM{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Mailing List Preview – {{ year }}</h1>
+  <a href="{{ url_for('send_emails.send_index') }}" class="btn btn-outline-secondary">← Back</a>
+</div>
+
+<div class="alert alert-info">
+  <strong>{{ matched|length }}</strong> families matched and ready to receive emails.
+  {% if unmatched %}<strong>{{ unmatched|length }}</strong> unmatched (no contact found – skipped).{% endif %}
+</div>
+
+{% if matched %}
+<div class="card shadow-sm mb-4">
+  <div class="card-header fw-bold text-success">✓ Matched – Will Receive Email</div>
+  <div class="card-body p-0">
+    <table class="table table-sm mb-0">
+      <thead>
+        <tr><th>Family Name</th><th>Recipient</th><th>Email</th><th class="text-end">Amount</th></tr>
+      </thead>
+      <tbody>
+        {% for r in matched %}
+        <tr>
+          <td>{{ r.family_name }}</td>
+          <td>{{ r.first_name }} {{ r.last_name }}</td>
+          <td>{{ r.email }}</td>
+          <td class="text-end">${{ "%.2f"|format(r.total_amount) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{% if unmatched %}
+<div class="card shadow-sm mb-4">
+  <div class="card-header fw-bold text-warning">⚠ Unmatched – No Contact Found (Skipped)</div>
+  <div class="card-body p-0">
+    <table class="table table-sm mb-0">
+      <thead><tr><th>Family Name</th><th class="text-end">Amount</th></tr></thead>
+      <tbody>
+        {% for r in unmatched %}
+        <tr>
+          <td>{{ r.family_name }}</td>
+          <td class="text-end">${{ "%.2f"|format(r.total_amount) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+{% if matched %}
+<div class="card shadow-sm">
+  <div class="card-body">
+    <form method="post" action="{{ url_for('send_emails.do_send') }}"
+          onsubmit="return confirm('Send {{ matched|length }} email(s)?');">
+      <input type="hidden" name="year" value="{{ year }}">
+      <input type="hidden" name="template_id" value="{{ template.id }}">
+      <div class="mb-3">
+        <label for="church_name" class="form-label fw-bold">Church / Organization Name</label>
+        <input type="text" class="form-control" id="church_name" name="church_name"
+               placeholder="Our Lady of Hope Church" required>
+        <div class="form-text">Used in the email body as <code>{{ '{{' }} church_name {{ '}}' }}</code>.</div>
+      </div>
+      <button type="submit" class="btn btn-danger">
+        📧 Send {{ matched|length }} Email{{ 's' if matched|length != 1 else '' }} Now
+      </button>
+    </form>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

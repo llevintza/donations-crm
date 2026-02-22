@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Contacts – Donations CRM{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Contacts</h1>
+  <a href="{{ url_for('contacts.upload_contacts') }}" class="btn btn-primary">
+    ⬆ Upload Contacts
+  </a>
+</div>
+
+{% if contacts %}
+<div class="card shadow-sm">
+  <div class="card-body p-0">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr>
+          <th>Family Name</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in contacts %}
+        <tr>
+          <td>{{ c.family_name }}</td>
+          <td>{{ c.first_name }}</td>
+          <td>{{ c.last_name }}</td>
+          <td><a href="mailto:{{ c.email }}">{{ c.email }}</a></td>
+          <td>{{ c.address }}</td>
+          <td>
+            <form method="post" action="{{ url_for('contacts.delete_contact', contact_id=c.id) }}"
+                  onsubmit="return confirm('Delete this contact?');">
+              <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+  <div class="alert alert-info">No contacts yet. <a href="{{ url_for('contacts.upload_contacts') }}">Upload a file</a> to get started.</div>
+{% endif %}
+{% endblock %}

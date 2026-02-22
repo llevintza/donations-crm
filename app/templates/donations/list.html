@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Donations – Donations CRM{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Donations</h1>
+  <a href="{{ url_for('donations.upload_donations') }}" class="btn btn-success">
+    ⬆ Upload Donations
+  </a>
+</div>
+
+<form method="get" class="mb-3 d-flex gap-2">
+  <select name="year" class="form-select w-auto">
+    <option value="">All Years</option>
+    {% for y in years %}
+      <option value="{{ y }}" {% if y == selected_year %}selected{% endif %}>{{ y }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="btn btn-outline-secondary">Filter</button>
+</form>
+
+{% if donations %}
+<div class="card shadow-sm">
+  <div class="card-body p-0">
+    <table class="table table-striped mb-0">
+      <thead>
+        <tr><th>Year</th><th>Family Name</th><th class="text-end">Total Amount</th></tr>
+      </thead>
+      <tbody>
+        {% for d in donations %}
+        <tr>
+          <td>{{ d.year }}</td>
+          <td>{{ d.family_name }}</td>
+          <td class="text-end">${{ "%.2f"|format(d.total_amount) }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% else %}
+  <div class="alert alert-info">No donations yet. <a href="{{ url_for('donations.upload_donations') }}">Upload a file</a> to get started.</div>
+{% endif %}
+{% endblock %}

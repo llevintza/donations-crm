@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Upload Contacts – Donations CRM{% endblock %}
+{% block content %}
+<h1 class="mb-4">Upload Contacts File</h1>
+
+<div class="row">
+  <div class="col-md-7">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="file" class="form-label fw-bold">Contacts File (.xlsx, .xls, or .csv)</label>
+            <input type="file" class="form-control" id="file" name="file"
+                   accept=".xlsx,.xls,.csv" required>
+          </div>
+          <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" id="replace_existing" name="replace_existing">
+            <label class="form-check-label" for="replace_existing">Replace all existing contacts</label>
+          </div>
+          <button type="submit" class="btn btn-primary">Import Contacts</button>
+          <a href="{{ url_for('contacts.list_contacts') }}" class="btn btn-link">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="card bg-light">
+      <div class="card-body">
+        <h6 class="fw-bold">Expected Columns</h6>
+        <ul class="mb-0">
+          <li><code>family_name</code> <span class="text-danger">*</span></li>
+          <li><code>first_name</code> <span class="text-danger">*</span></li>
+          <li><code>last_name</code> <span class="text-danger">*</span></li>
+          <li><code>email</code> <span class="text-danger">*</span></li>
+          <li><code>address</code> (optional)</li>
+        </ul>
+        <hr>
+        <small class="text-muted">Column names are case-insensitive. Common aliases like "Family Name" or "Email Address" are also accepted.</small>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
