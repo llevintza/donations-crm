@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if template else 'New' }} Template – Donations CRM{% endblock %}
+{% block content %}
+<h1 class="mb-4">{{ 'Edit' if template else 'New' }} Email Template</h1>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="post">
+          <div class="mb-3">
+            <label for="name" class="form-label fw-bold">Template Name</label>
+            <input type="text" class="form-control" id="name" name="name"
+                   value="{{ form_data.get('name', template.name if template else '') }}" required>
+          </div>
+          <div class="mb-3">
+            <label for="subject" class="form-label fw-bold">Subject</label>
+            <input type="text" class="form-control" id="subject" name="subject"
+                   value="{{ form_data.get('subject', template.subject if template else '') }}" required>
+          </div>
+          <div class="mb-3">
+            <label for="body" class="form-label fw-bold">Body</label>
+            <textarea class="form-control font-monospace" id="body" name="body"
+                      rows="14" required>{{ form_data.get('body', template.body if template else '') }}</textarea>
+          </div>
+          <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" id="is_default" name="is_default"
+                   {% if form_data.get('is_default') == 'on' or (template and template.is_default and not form_data) %}checked{% endif %}>
+            <label class="form-check-label" for="is_default">Set as default template</label>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Template</button>
+          <a href="{{ url_for('email_templates.list_templates') }}" class="btn btn-link">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card bg-light">
+      <div class="card-body">
+        <h6 class="fw-bold">Available Variables</h6>
+        <ul class="mb-0 small">
+          <li><code>{{ '{{' }} first_name {{ '}}' }}</code></li>
+          <li><code>{{ '{{' }} last_name {{ '}}' }}</code></li>
+          <li><code>{{ '{{' }} family_name {{ '}}' }}</code></li>
+          <li><code>{{ '{{' }} total_amount {{ '}}' }}</code></li>
+          <li><code>{{ '{{' }} year {{ '}}' }}</code></li>
+          <li><code>{{ '{{' }} church_name {{ '}}' }}</code></li>
+        </ul>
+        <hr>
+        <small class="text-muted">Use Jinja2 syntax. Example:<br>
+        <code>{{ "{{ '%.2f'|format(total_amount) }}" }}</code><br>formats to 2 decimal places.</small>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

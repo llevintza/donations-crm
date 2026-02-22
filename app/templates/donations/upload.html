@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Upload Donations – Donations CRM{% endblock %}
+{% block content %}
+<h1 class="mb-4">Upload Donations File</h1>
+
+<div class="row">
+  <div class="col-md-7">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="file" class="form-label fw-bold">Donations File (.xlsx, .xls, or .csv)</label>
+            <input type="file" class="form-control" id="file" name="file"
+                   accept=".xlsx,.xls,.csv" required>
+          </div>
+          <div class="mb-3">
+            <label for="default_year" class="form-label fw-bold">Default Year</label>
+            <input type="number" class="form-control" id="default_year" name="default_year"
+                   value="{{ default_year }}" min="2000" max="2099">
+            <div class="form-text">Used when the file doesn't include a year column.</div>
+          </div>
+          <div class="form-check mb-3">
+            <input type="checkbox" class="form-check-input" id="replace_existing" name="replace_existing">
+            <label class="form-check-label" for="replace_existing">
+              Replace existing records for this year
+            </label>
+          </div>
+          <button type="submit" class="btn btn-success">Import Donations</button>
+          <a href="{{ url_for('donations.list_donations') }}" class="btn btn-link">Cancel</a>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-5">
+    <div class="card bg-light">
+      <div class="card-body">
+        <h6 class="fw-bold">Expected Columns</h6>
+        <ul class="mb-0">
+          <li><code>family_name</code> <span class="text-danger">*</span></li>
+          <li><code>total_amount</code> <span class="text-danger">*</span></li>
+          <li><code>year</code> (optional)</li>
+        </ul>
+        <hr>
+        <small class="text-muted">Column names are case-insensitive. "Family Name", "Amount", "Total" etc. are also accepted.</small>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

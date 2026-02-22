@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Preview Template – Donations CRM{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Template Preview</h1>
+  <a href="{{ url_for('email_templates.list_templates') }}" class="btn btn-outline-secondary">← Back</a>
+</div>
+
+<p class="text-muted">Rendered with sample data: Jane Smith / Smith Family / $1,250.00 / 2024</p>
+
+{% if error %}
+  <div class="alert alert-danger">Template error: {{ error }}</div>
+{% else %}
+  <div class="card shadow-sm mb-3">
+    <div class="card-header"><strong>Subject:</strong> {{ preview_subject }}</div>
+    <div class="card-body">
+      <pre class="mb-0" style="white-space:pre-wrap;">{{ preview_body }}</pre>
+    </div>
+  </div>
+{% endif %}
+
+<a href="{{ url_for('email_templates.edit_template', tpl_id=template.id) }}" class="btn btn-primary">Edit Template</a>
+{% endblock %}

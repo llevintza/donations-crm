@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Email Templates – Donations CRM{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1>Email Templates</h1>
+  <a href="{{ url_for('email_templates.new_template') }}" class="btn btn-primary">+ New Template</a>
+</div>
+
+{% if templates %}
+<div class="list-group">
+  {% for t in templates %}
+  <div class="list-group-item d-flex justify-content-between align-items-start">
+    <div>
+      <h6 class="mb-0">
+        {{ t.name }}
+        {% if t.is_default %}<span class="badge bg-primary ms-1">Default</span>{% endif %}
+      </h6>
+      <small class="text-muted">Subject: {{ t.subject }}</small>
+    </div>
+    <div class="btn-group btn-group-sm">
+      <a href="{{ url_for('email_templates.preview_template', tpl_id=t.id) }}"
+         class="btn btn-outline-secondary">Preview</a>
+      <a href="{{ url_for('email_templates.edit_template', tpl_id=t.id) }}"
+         class="btn btn-outline-primary">Edit</a>
+      <form method="post" action="{{ url_for('email_templates.delete_template', tpl_id=t.id) }}"
+            onsubmit="return confirm('Delete this template?');">
+        <button type="submit" class="btn btn-outline-danger rounded-0 rounded-end">Delete</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+  <div class="alert alert-info">No templates yet.</div>
+{% endif %}
+{% endblock %}

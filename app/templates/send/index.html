@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Send Emails – Donations CRM{% endblock %}
+{% block content %}
+<h1 class="mb-4">Send Year-End Donation Emails</h1>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <form method="get" action="{{ url_for('send_emails.preview') }}">
+          <div class="mb-3">
+            <label for="year" class="form-label fw-bold">Donation Year</label>
+            <select name="year" id="year" class="form-select" required>
+              <option value="">-- Select Year --</option>
+              {% for y in years %}
+                <option value="{{ y }}">{{ y }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="template_id" class="form-label fw-bold">Email Template</label>
+            <select name="template_id" id="template_id" class="form-select" required>
+              <option value="">-- Select Template --</option>
+              {% for t in templates %}
+                <option value="{{ t.id }}"
+                  {% if default_template and t.id == default_template.id %}selected{% endif %}>
+                  {{ t.name }}{% if t.is_default %} ★{% endif %}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Preview Mailing List →</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card bg-light">
+      <div class="card-body">
+        <h6 class="fw-bold">How It Works</h6>
+        <ol class="mb-0 small">
+          <li>Select the donation year and email template.</li>
+          <li>Review the mailing list – matched records will receive emails.</li>
+          <li>Enter your church name and confirm to send.</li>
+          <li>Results are logged in the <a href="{{ url_for('send_emails.logs') }}">Email Logs</a>.</li>
+        </ol>
+        <hr>
+        <small class="text-muted">Configure SMTP settings via environment variables (see README).</small>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
